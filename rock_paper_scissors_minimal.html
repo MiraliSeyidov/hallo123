@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Rock Paper Scissors</title>
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0; min-height:100vh; display:grid; place-items:center;
+  background:#fff; color:#111; font-family:Arial,Helvetica,sans-serif;
+}
+.wrap{width:min(92%,430px); text-align:center}
+h1{font-size:25px;font-weight:500;margin:0 0 8px;letter-spacing:-.5px}
+.note{font-size:13px;color:#777;margin:0 0 38px}
+.score{font-size:13px;margin-bottom:28px;color:#555}
+.score b{color:#111;font-weight:500}
+.choices{display:flex;justify-content:center;gap:10px}
+.choice{
+  width:105px;height:105px;border:1px solid #111;background:#fff;
+  font-size:34px;cursor:pointer;border-radius:0;transition:.12s;
+}
+.choice:hover{background:#111;color:#fff}
+.choice span{display:block;font-size:11px;margin-top:9px;letter-spacing:.4px}
+.result{height:55px;padding-top:23px;font-size:13px;color:#555}
+.hidden{display:none}
+.final{padding:10px}
+.final h2{font-size:25px;font-weight:500;margin:0 0 18px}
+.final p{font-size:14px;line-height:1.6;color:#555;margin:0 auto 28px;max-width:340px}
+.final-buttons{display:flex;justify-content:center;gap:10px;position:relative;height:48px}
+.final button{
+  height:46px;padding:0 22px;border:1px solid #111;background:#fff;
+  color:#111;font-size:13px;cursor:pointer;
+}
+.final .yes{background:#111;color:#fff}
+#noBtn{position:relative}
+.hint{font-size:11px!important;color:#999!important;margin-top:24px!important}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<section id="game">
+  <h1>Rock Paper Scissors</h1>
+  <p class="note">Best of three.</p>
+
+  <div class="score">You <b id="you">0</b> &nbsp;—&nbsp; Me <b id="me">0</b></div>
+
+  <div class="choices">
+    <button class="choice" onclick="play('rock')">✊<span>ROCK</span></button>
+    <button class="choice" onclick="play('paper')">✋<span>PAPER</span></button>
+    <button class="choice" onclick="play('scissors')">✌︎<span>SCISSORS</span></button>
+  </div>
+
+  <div id="result" class="result">Choose one.</div>
+</section>
+
+<section id="final" class="final hidden">
+  <h2>One more thing.</h2>
+  <p>
+    I know this is a little random, but I think you seem interesting.<br>
+    Would you let me take you for a coffee sometime?
+  </p>
+
+  <div class="final-buttons">
+    <button class="yes" onclick="yes()">Yes, why not?</button>
+    <button id="noBtn" onmouseenter="escapeNo()" ontouchstart="escapeNo()">No</button>
+  </div>
+
+  <p id="hint" class="hint hidden">That button was never really an option.</p>
+</section>
+
+</div>
+
+<script>
+let you=0,me=0;
+const choices=["rock","paper","scissors"];
+
+function play(c){
+  if(you>=2||me>=2)return;
+  const a=choices[Math.floor(Math.random()*3)];
+  if(c!==a){
+    if((c==="rock"&&a==="scissors")||(c==="paper"&&a==="rock")||(c==="scissors"&&a==="paper")) you++;
+    else me++;
+  }
+  document.getElementById("you").textContent=you;
+  document.getElementById("me").textContent=me;
+
+  const r=document.getElementById("result");
+  r.textContent=c===a ? "Draw." : you>me ? "You win this round." : "I win this round.";
+
+  if(you===2||me===2) setTimeout(()=>{
+    document.getElementById("game").classList.add("hidden");
+    document.getElementById("final").classList.remove("hidden");
+  },500);
+}
+
+function escapeNo(){
+  const b=document.getElementById("noBtn");
+  const x=(Math.random()*180)-90;
+  const y=(Math.random()*70)-35;
+  b.style.transform=`translate(${x}px,${y}px)`;
+  document.getElementById("hint").classList.remove("hidden");
+}
+
+function yes(){
+  document.querySelector(".final-buttons").innerHTML='<div style="font-size:15px">I knew you had good judgment. ☕</div>';
+  document.getElementById("hint").classList.add("hidden");
+}
+</script>
+</body>
+</html>
